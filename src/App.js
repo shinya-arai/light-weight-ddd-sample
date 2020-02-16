@@ -1,17 +1,19 @@
 import React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
 
-import Input from './screens/input'
-import Register from './screens/register'
+import history from './history'
 
-const history = require('history').createHashHistory;
+import AccountConfirm from './screens/accountConfirm'
+import Register from './screens/register'
+import Menu from './screens/menu'
 
 const App = () => {
   return (
-    <Router history={history()}>
+    <Router history={history}>
       <Switch>
-        <Route exact path="/" component={Input} />
+        <Route exact path="/" component={AccountConfirm} />
         <Route path="/register" component={Register} />
+        <Route path="/menu" component={Menu} />
       </Switch>
     </Router>
   )
