@@ -1,11 +1,12 @@
 import Register from '../../factory/Register'
 
 import Confirm from '../../service/Confirm'
+import Deposit from '../../service/Deposit'
+import Withdraw from '../../service/Withdraw'
 
 import history from '../../history'
 
 const initialState = {
-  cards: [],
   accounts: [],
   newCard: null,
   confirmedAccount: null
@@ -18,7 +19,6 @@ export default (state = initialState, action) =>  {
 
       return {
         ...state,
-        cards: state.cards.concat(newUser.card),
         accounts: state.accounts.concat(newUser.account),
         newCard: newUser.card
       }
@@ -30,6 +30,24 @@ export default (state = initialState, action) =>  {
       return {
         ...state,
         confirmedAccount: confirmedAccount 
+      }
+
+    case 'DEPOSIT':
+      const depositedAccount = new Deposit().depositToAccount(action.payload.amount, state.confirmedAccount)
+
+      return {
+        ...state,
+        accounts: state.accounts.map(account => account.accountNumber === depositedAccount.accountNumber ? depositedAccount : account),
+        confirmedAccount: depositedAccount
+      }
+
+    case 'WITHDRAW':
+      const withdrawedAccount = new Withdraw().withdrawFromAccount(action.payload.amount, state.confirmedAccount)
+
+      return {
+        ...state,
+        accounts: state.accounts.map(account => account.accountNumber === withdrawedAccount.accountNumber ? withdrawedAccount : account),
+        confirmedAccount: withdrawedAccount
       }
 
     default:
